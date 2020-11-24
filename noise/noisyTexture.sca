@@ -1,0 +1,19 @@
+
+#import <gradients>
+#import <sdf>
+
+vec4 addAmbiantNoise(vec2 pos, vec4 c, float noiseAmount, float time) {
+    float n = fract(sin(dot(pos, vec2(12.9898, 78.233) + sin(time))) * 
+                    43758.5453);
+    c.x *= (1.0 - noiseAmount + n * noiseAmount  + n * n * n * noiseAmount / 2.);
+    c.y *= (1.0 - noiseAmount + n * noiseAmount  + n * n * n * noiseAmount / 2.);
+    c.z *= (1.0 - noiseAmount + n * noiseAmount  + n * n * n * noiseAmount / 2.);
+	return c;
+}
+
+vec4 main(vec4 color1) {
+  float time = std::getTime()/100.;
+  vec2 uv = fragment(std::getVertexTexCoord());
+
+  return addAmbiantNoise(uv, color1 + 0.1, .8, time);
+}
