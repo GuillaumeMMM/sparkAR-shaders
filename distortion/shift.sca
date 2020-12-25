@@ -1,0 +1,27 @@
+
+#import <gradients>
+#import <sdf>
+
+precision highp float;
+
+float rand(vec2 uv) {
+ 
+    float a = dot(uv, vec2(92., 80.));
+    float b = dot(uv, vec2(41., 62.));
+    
+    float x = sin(a) + cos(b) * 51.;
+    return fract(x);
+    
+}
+
+vec4 main(std::Texture2d myTex) {
+  float time = std::getTime() * 10.;
+  vec2 fragCoord = fragment(floor(std::getRenderTargetSize() * std::getVertexTexCoord()));
+  vec2 iResolution = std::getRenderTargetSize();
+  vec2 uv = fragCoord.xy / iResolution.xy;
+  vec3 colorDelta = myTex.sample(uv).rgb;  
+  float factor = length(colorDelta); 
+        
+  uv += 0.5 * (factor * colorDelta.rb) / 20.0 * sin(time);    
+  return myTex.sample(uv);
+}
